@@ -1,0 +1,8 @@
+{"timestamp": "2026-06-08T02:10:02.458480Z", "level": "info", "event": "Initializing ApiKeyManager"}
+{"timestamp": "2026-06-08T02:10:02.458740Z", "level": "warning", "event": "GOOGLE_API_KEY is missing in environment variables"}
+{"timestamp": "2026-06-08T02:10:02.458862Z", "level": "info", "event": "GROQ_API_KEY loaded successfully from environment"}
+{"path": "/home/varshitha/Desktop/Travel Agent/research_and_analyst/config/configuration.yaml", "keys": ["llm"], "timestamp": "2026-06-08T02:10:02.460572Z", "level": "info", "event": "Configuration loaded successfully"}
+{"config_keys": ["llm"], "timestamp": "2026-06-08T02:10:02.460721Z", "level": "info", "event": "YAML configuration loaded successfully"}
+{"provider": "groq", "model": "deepseek-r1-distill-llama-70b", "timestamp": "2026-06-08T02:10:02.460835Z", "level": "info", "event": "Loading LLM"}
+{"provider": "groq", "model": "deepseek-r1-distill-llama-70b", "timestamp": "2026-06-08T02:10:02.597608Z", "level": "info", "event": "LLM loaded successfully"}
+HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 400 Bad Request"

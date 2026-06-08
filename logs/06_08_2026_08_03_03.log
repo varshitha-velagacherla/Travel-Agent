@@ -1,0 +1,9 @@
+{"timestamp": "2026-06-08T02:33:06.071596Z", "level": "info", "event": "Initializing ApiKeyManager"}
+{"timestamp": "2026-06-08T02:33:06.071829Z", "level": "info", "event": "GOOGLE_API_KEY loaded successfully from environment"}
+{"timestamp": "2026-06-08T02:33:06.071922Z", "level": "info", "event": "GROQ_API_KEY loaded successfully from environment"}
+{"path": "/home/varshitha/Desktop/Travel Agent/research_and_analyst/config/configuration.yaml", "keys": ["llm"], "timestamp": "2026-06-08T02:33:06.073402Z", "level": "info", "event": "Configuration loaded successfully"}
+{"config_keys": ["llm"], "timestamp": "2026-06-08T02:33:06.073535Z", "level": "info", "event": "YAML configuration loaded successfully"}
+{"provider": "groq", "model": "llama-3.3-70b-versatile", "timestamp": "2026-06-08T02:33:06.073646Z", "level": "info", "event": "Loading LLM"}
+{"provider": "groq", "model": "llama-3.3-70b-versatile", "timestamp": "2026-06-08T02:33:06.224650Z", "level": "info", "event": "LLM loaded successfully"}
+HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+{"timestamp": "2026-06-08T02:33:06.948827Z", "level": "info", "event": "ModelLoader test completed successfully"}

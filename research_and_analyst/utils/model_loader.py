@@ -20,7 +20,6 @@ class ApiKeyManager:
         load_dotenv()
 
         self.api_keys = {
-            "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
             "GOOGLE_API_KEY": os.getenv("GOOGLE_API_KEY"),
             "GROQ_API_KEY": os.getenv("GROQ_API_KEY"),
         }
@@ -101,65 +100,95 @@ class ModelLoader:
     # ----------------------------------------------------------------------
     def load_llm(self):
         """
-        Load and return a chat-based LLM according to the configured provider.
+        Load and return a chat-based LLM.
 
         Supported providers:
-            - OpenAI
-            - Google (Gemini)
+            - Google Gemini
             - Groq
 
         Returns:
-            ChatOpenAI | ChatGoogleGenerativeAI | ChatGroq: LLM instance
+            ChatGoogleGenerativeAI | ChatGroq
         """
         try:
             llm_block = self.config["llm"]
-            provider_key = os.getenv("LLM_PROVIDER", "openai")
+
+            # Default provider = google
+            provider_key = os.getenv("LLM_PROVIDER", "google").lower()
 
             if provider_key not in llm_block:
-                log.error("LLM provider not found in configuration", provider=provider_key)
-                raise ValueError(f"LLM provider '{provider_key}' not found in configuration")
+                raise ValueError(
+                    f"LLM provider '{provider_key}' not found in configuration"
+                )
 
             llm_config = llm_block[provider_key]
-            provider = llm_config.get("provider")
-            model_name = llm_config.get("model_name")
-            temperature = llm_config.get("temperature", 0.2)
+
+            provider = llm_config["provider"]
+            model_name = llm_config["model_name"]
+            temperature = llm_config.get("temperature", 0)
             max_tokens = llm_config.get("max_output_tokens", 2048)
 
-            log.info("Loading LLM", provider=provider, model=model_name)
+            log.info(
+                "Loading LLM",
+                provider=provider,
+                model=model_name
+            )
 
+            # -----------------------------
+            # GOOGLE GEMINI
+            # -----------------------------
             if provider == "google":
+
+                google_api_key = self.api_key_mgr.get("GOOGLE_API_KEY")
+
+                if not google_api_key:
+                    raise ValueError(
+                        "GOOGLE_API_KEY not found in environment variables"
+                    )
+
                 llm = ChatGoogleGenerativeAI(
                     model=model_name,
-                    google_api_key=self.api_key_mgr.get("GOOGLE_API_KEY"),
+                    google_api_key=google_api_key,
                     temperature=temperature,
                     max_output_tokens=max_tokens,
                 )
 
+            # -----------------------------
+            # GROQ
+            # -----------------------------
             elif provider == "groq":
+
+                groq_api_key = self.api_key_mgr.get("GROQ_API_KEY")
+
+                if not groq_api_key:
+                    raise ValueError(
+                        "GROQ_API_KEY not found in environment variables"
+                    )
+
                 llm = ChatGroq(
                     model=model_name,
-                    api_key=self.api_key_mgr.get("GROQ_API_KEY"),
-                    temperature=temperature,
-                )
-
-            elif provider == "openai":
-                llm = ChatOpenAI(
-                    model=model_name,
-                    api_key=self.api_key_mgr.get("OPENAI_API_KEY"),
+                    api_key=groq_api_key,
                     temperature=temperature,
                 )
 
             else:
-                log.error("Unsupported LLM provider encountered", provider=provider)
-                raise ValueError(f"Unsupported LLM provider: {provider}")
+                raise ValueError(
+                    f"Unsupported provider: {provider}"
+                )
 
-            log.info("LLM loaded successfully", provider=provider, model=model_name)
+            log.info(
+                "LLM loaded successfully",
+                provider=provider,
+                model=model_name,
+            )
+
             return llm
 
         except Exception as e:
             log.error("Error loading LLM", error=str(e))
-            raise ResearchAnalystException("Failed to load LLM", sys)
-
+            raise ResearchAnalystException(
+                f"Failed to load LLM: {str(e)}",
+                sys
+            )
 
 # ----------------------------------------------------------------------
 # Standalone Testing
